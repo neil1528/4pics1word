@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 Pics 1 Word – Valentine Edition</title>
+    <style>
+        /* Dark gradient background mimicking the original game */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #2c3e50, #000000);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Main game container */
+        .game-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        /* Round indicator */
+        .round-indicator {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        /* Image grid: 2x2 */
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .image-frame {
+            width: 100%;
+            aspect-ratio: 1; /* Square frames */
+            border: 2px solid #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #333;
+        }
+
+        .image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Answer boxes */
+        .answer-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .answer-box {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Letter tiles grid */
+        .letter-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .letter-tile {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to bottom, #4a90e2, #357abd);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s;
+        }
+
+        .letter-tile:hover {
+            transform: scale(1.05);
+        }
+
+        .letter-tile.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Control buttons */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: #e74c3c;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Feedback messages */
+        .feedback {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .feedback.show {
+            opacity: 1;
+        }
+
+        /* Shake animation for wrong answer */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        /* Fade transitions */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+
+        /* End screen */
+        .end-screen {
+            display: none;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .end-screen.show {
+            display: block;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 10px;
+            }
+            .letter-tile {
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+            .answer-box {
+                width: 25px;
+                height: 25px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container" id="gameContainer">
+    <div class="round-indicator" id="roundIndicator">Round 1 / 3</div>
+    <div class="image-grid" id="imageGrid">
+        <div class="image-frame"><img src="https://via.placeholder.com/150?text=Her+Photo+1" alt="Image 1"></div>
+        <div class="image-frame"><img src="https://via.placeholder.com/150?text=Her+Photo+2" alt="Image 2"></div>
+        <div class="image-frame"><img src="https://via.placeholder.com/150?text=Her+Photo+3" alt="Image 3"></div>
+        <div class="image-frame"><img src="https://via.placeholder.com/150?text=Her+Photo+4" alt="Image 4"></div>
+    </div>
+    <div class="answer-boxes" id="answerBoxes"></div>
+    <div class="letter-grid" id="letterGrid"></div>
+    <div class="controls">
+        <button class="control-btn" id="backspaceBtn">Backspace</button>
+        <button class="control-btn" id="clearBtn">Clear</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+</div>
+<div class="end-screen" id="endScreen">
+    ❤️ Happy Valentine’s<br>
+    ❤️ You mean everything to me
+</div>
+
+<script>
+    // Round data - EDIT THIS TO CHANGE WORDS AND IMAGES
+    const rounds = [
+        {
+            answer: "BEAUTIFUL",
+            images: [
+                "https://via.placeholder.com/150?text=Her+Photo+1", // Replace with actual image URLs
+                "https://via.placeholder.com/150?text=Her+Photo+2",
+                "https://via.placeholder.com/150?text=Her+Photo+3",
+                "https://via.placeholder.com/150?text=Her+Photo+4"
+            ]
+        },
+        {
+            answer: "LOVE",
+            images: [
+                "https://via.placeholder.com/150?text=Romantic+1", // Replace with actual image URLs
+                "https://via.placeholder.com/150?text=Romantic+2",
+                "https://via.placeholder.com/150?text=Romantic+3",
+                "https://via.placeholder.com/150?text=Romantic+4"
+            ]
+        },
+        {
+            answer: "FOREVER",
+            images: [
+                "https://via.placeholder.com/150?text=Couple+1", // Replace with actual image URLs
+                "https://via.placeholder.com/150?text=Couple+2",
+                "https://via.placeholder.com/150?text=Couple+3",
+                "https://via.placeholder.com/150?text=Couple+4"
+            ]
+        }
+    ];
+
+    let currentRound = 0;
+    let currentGuess = [];
+    let availableLetters = [];
+
+    const gameContainer = document.getElementById('gameContainer');
+    const roundIndicator = document.getElementById('roundIndicator');
+    const imageGrid = document.getElementById('imageGrid');
+    const answerBoxes = document.getElementById('answerBoxes');
+    const letterGrid = document.getElementById('letterGrid');
+    const backspaceBtn = document.getElementById('backspaceBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const feedback = document.getElementById('feedback');
+    const endScreen = document.getElementById('endScreen');
+
+    // Function to generate random extra letters
+    function generateExtraLetters(answer, totalTiles = 16) {
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const answerLetters = answer.split('');
+        const extras = [];
+        while (answerLetters.length + extras.length < totalTiles) {
+            const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+            if (!answerLetters.includes(randomLetter) && !extras.includes(randomLetter)) {
+                extras.push(randomLetter);
+            }
+        }
+        return [...answerLetters, ...extras];
+    }
+
+    // Shuffle array
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Load a round
+    function loadRound(roundIndex) {
+        const round = rounds[roundIndex];
+        currentRound = roundIndex;
+        currentGuess = [];
+        roundIndicator.textContent = `Round ${roundIndex + 1} / 3`;
+
+        // Update images
+        const imageFrames = imageGrid.querySelectorAll('.image-frame img');
+        round.images.forEach((src, i) => {
+            imageFrames[i].src = src;
+        });
+
+        // Create answer boxes
+        answerBoxes.innerHTML = '';
+        for (let i = 0; i < round.answer.length; i++) {
+            const box = document.createElement('div');
+            box.className = 'answer-box';
+            answerBoxes.appendChild(box);
+        }
+
+        // Generate and shuffle letters
+        availableLetters = shuffle(generateExtraLetters(round.answer));
+        renderLetterTiles();
+
+        // Hide feedback
+        feedback.classList.remove('show');
+        feedback.textContent = '';
+    }
+
+    // Render letter tiles
+    function renderLetterTiles() {
+        letterGrid.innerHTML = '';
+        availableLetters.forEach(letter => {
+            const tile = document.createElement('button');
+            tile.className = 'letter-tile';
+            tile.textContent = letter;
+            tile.addEventListener('click', () => selectLetter(letter, tile));
+            letterGrid.appendChild(tile);
+        });
+    }
+
+    // Select a letter
+    function selectLetter(letter, tile) {
+        const boxes = answerBoxes.querySelectorAll('.answer-box');
+        const emptyBox = Array.from(boxes).find(box => box.textContent === '');
+        if (emptyBox) {
+            emptyBox.textContent = letter;
+            currentGuess.push(letter);
+            tile.classList.add('disabled');
+            tile.disabled = true;
+            checkGuess();
+        }
+    }
+
+    // Check if guess is complete
+    function checkGuess() {
+        const round = rounds[currentRound];
+        if (currentGuess.length === round.answer.length) {
+            if (currentGuess.join('') === round.answer) {
+                feedback.textContent = 'Correct ❤️';
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    if (currentRound < rounds.length - 1) {
+                        gameContainer.classList.add('fade-out');
+                        setTimeout(() => {
+                            loadRound(currentRound + 1);
+                            gameContainer.classList.remove('fade-out');
+                            gameContainer.classList.add('fade-in');
+                        }, 500);
+                    } else {
+                        gameContainer.style.display = 'none';
+                        endScreen.classList.add('show');
+                    }
+                }, 1500);
+            } else {
+                feedback.textContent = 'Wrong! Try again.';
+                feedback.classList.add('show');
+                answerBoxes.classList.add('shake');
+                setTimeout(() => {
+                    answerBoxes.classList.remove('shake');
+                    feedback.classList.remove('show');
+                }, 1000);
+                // Allow retry by not resetting, but enable tiles back? Wait, tiles are removed, so need to handle retry
+                // Actually, since tiles are disabled, and guess is full but wrong, we need to allow clearing or backspacing
+            }
+        }
+    }
+
+    // Backspace
+    backspaceBtn.addEventListener('click', () => {
+        if (currentGuess.length > 0) {
+            const lastLetter = currentGuess.pop();
+            const boxes = answerBoxes.querySelectorAll('.answer-box');
+            boxes[currentGuess.length].textContent = '';
+            // Re-enable the tile
+            const tiles = letterGrid.querySelectorAll('.letter-tile');
+            tiles.forEach(tile => {
+                if (tile.textContent === lastLetter && tile.disabled) {
+                    tile.disabled = false;
+                    tile.classList.remove('disabled');
+                    return;
+                }
+            });
+        }
+    });
+
+    // Clear
+    clearBtn.addEventListener('click', () => {
+        currentGuess = [];
+        const boxes = answerBoxes.querySelectorAll('.answer-box');
+        boxes.forEach(box => box.textContent = '');
+        const tiles = letterGrid.querySelectorAll('.letter-tile');
+        tiles.forEach(tile => {
+            tile.disabled = false;
+            tile.classList.remove('disabled');
+        });
+        feedback.classList.remove('show');
+    });
+
+    // Initialize game
+    loadRound(0);
+</script>
+</body>
+</html>
