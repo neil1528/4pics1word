@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,416 +8,403 @@
     <style>
         /* Pink gradient background for cute, pink themed design */
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to bottom, #ffafbd, #ffc3a0);
-            color: #4a004a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            user-select: none;
+          margin: 0;
+          padding: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: linear-gradient(to bottom, #ffafbd, #ffc3a0);
+          color: #4a004a;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          overflow-x: hidden;
+          user-select: none;
         }
 
         /* Main container */
         .game-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-            background: #ffe6f7;
-            border-radius: 20px;
-            box-shadow:
-                0 8px 24px rgba(255 105 180 / 0.4),
-                inset 0 0 20px rgba(255 182 193 / 0.5);
-            position: relative;
-            -webkit-tap-highlight-color: transparent;
-            overflow: hidden;
-            min-height: 600px;
+          width: 100%;
+          max-width: 400px;
+          padding: 20px;
+          box-sizing: border-box;
+          text-align: center;
+          background: #ffe6f7;
+          border-radius: 20px;
+          box-shadow: 0 8px 24px rgba(255 105 180 / 0.4),
+            inset 0 0 20px rgba(255 182 193 / 0.5);
+          position: relative;
+          -webkit-tap-highlight-color: transparent;
+          overflow: hidden;
+          min-height: 600px;
         }
 
         /* Round indicator */
         .round-indicator {
-            font-weight: 700;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: #b33951;
-            letter-spacing: 1px;
+          font-weight: 700;
+          font-size: 1.3rem;
+          margin-bottom: 20px;
+          color: #b33951;
+          letter-spacing: 1px;
         }
 
         /* Image grid: 2x2 */
         .image-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-bottom: 20px;
         }
 
         .image-frame {
-            width: 100%;
-            aspect-ratio: 1;
-            border: 4px solid #ff65a3;
-            border-radius: 15px;
-            overflow: hidden;
-            background: #ffd3e0;
-            box-shadow: 0 6px 12px rgba(255 105 180 / 0.3);
-            transition: filter 0.5s ease;
+          width: 100%;
+          aspect-ratio: 1;
+          border: 4px solid #ff65a3;
+          border-radius: 15px;
+          overflow: hidden;
+          background: #ffd3e0;
+          box-shadow: 0 6px 12px rgba(255 105 180 / 0.3);
+          transition: filter 0.5s ease;
         }
 
         .image-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            user-select: none;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          user-select: none;
         }
 
         /* Answer boxes container */
         .answer-boxes {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            user-select: none;
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          margin-bottom: 24px;
+          user-select: none;
         }
 
         .answer-box {
-            width: 38px;
-            height: 38px;
-            border: 3px solid #ff65a3;
-            border-radius: 10px;
-            background: #fff0f5;
-            color: #b3335a;
-            font-weight: 800;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow:
-                inset 0 2px 4px rgba(255 182 193 / 0.8),
-                0 3px 5px rgba(255 105 180 / 0.2);
-            user-select: none;
+          width: 38px;
+          height: 38px;
+          border: 3px solid #ff65a3;
+          border-radius: 10px;
+          background: #fff0f5;
+          color: #b3335a;
+          font-weight: 800;
+          font-size: 1.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: inset 0 2px 4px rgba(255 182 193 / 0.8), 0 3px 5px rgba(255 105 180 / 0.2);
+          user-select: none;
         }
 
         /* Letter keyboard: horizontal, two lines */
         .letter-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 24px;
-            user-select: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          justify-content: center;
+          margin-bottom: 24px;
+          user-select: none;
         }
 
         .letter-tile {
-            flex: 0 0 12%;
-            min-width: 44px;
-            height: 44px;
-            background: linear-gradient(to bottom, #ff92bc, #e55597);
-            border: none;
-            border-radius: 12px;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.25rem;
-            cursor: pointer;
-            box-shadow:
-                0 5px 10px rgba(229, 85, 151, 0.7),
-                inset 0 1px 0 rgba(255 255 255 / 0.4);
-            transition: transform 0.1s ease, background 0.3s ease;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            -webkit-tap-highlight-color: transparent;
+          flex: 0 0 12%;
+          min-width: 44px;
+          height: 44px;
+          background: linear-gradient(to bottom, #ff92bc, #e55597);
+          border: none;
+          border-radius: 12px;
+          color: #fff;
+          font-weight: 700;
+          font-size: 1.25rem;
+          cursor: pointer;
+          box-shadow: 0 5px 10px rgba(229, 85, 151, 0.7), inset 0 1px 0 rgba(255 255 255 / 0.4);
+          transition: transform 0.1s ease, background 0.3s ease;
+          user-select: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .letter-tile:hover:not(.disabled),
         .letter-tile:focus:not(.disabled) {
-            background: linear-gradient(to bottom, #ffafcd, #f05479);
-            transform: scale(1.1);
-            outline: none;
+          background: linear-gradient(to bottom, #ffafcd, #f05479);
+          transform: scale(1.1);
+          outline: none;
         }
 
         .letter-tile.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            background: #f4c6db;
-            box-shadow: none;
-            transform: none !important;
+          opacity: 0.4;
+          pointer-events: none;
+          background: #f4c6db;
+          box-shadow: none;
+          transform: none !important;
         }
 
         /* Controls horizontal, aligned with keyboard */
         .controls {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 10px;
-            user-select: none;
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+          margin-bottom: 10px;
+          user-select: none;
         }
 
         .control-btn {
-            flex: 0 0 20%;
-            min-width: 70px;
-            padding: 10px 0;
-            background: linear-gradient(to bottom, #ff6b9d, #d64375);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow:
-                0 6px 12px rgba(214, 67, 117, 0.9),
-                inset 0 2px 0 rgba(255 255 255 / 0.3);
-            transition: background 0.3s ease, transform 0.1s ease;
+          flex: 0 0 20%;
+          min-width: 70px;
+          padding: 10px 0;
+          background: linear-gradient(to bottom, #ff6b9d, #d64375);
+          border: none;
+          border-radius: 12px;
+          color: white;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          box-shadow: 0 6px 12px rgba(214, 67, 117, 0.9), inset 0 2px 0 rgba(255 255 255 / 0.3);
+          transition: background 0.3s ease, transform 0.1s ease;
         }
 
         .control-btn:hover,
         .control-btn:focus {
-            background: linear-gradient(to bottom, #ff8bb7, #e45b8a);
-            transform: scale(1.05);
-            outline: none;
+          background: linear-gradient(to bottom, #ff8bb7, #e45a8a);
+          transform: scale(1.05);
+          outline: none;
         }
 
         /* Feedback */
         .feedback {
-            font-weight: 700;
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: #b30059;
-            min-height: 2rem;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            user-select: none;
+          font-weight: 700;
+          font-size: 1.3rem;
+          margin-bottom: 20px;
+          color: #b30059;
+          min-height: 2rem;
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          user-select: none;
         }
 
         .feedback.show {
-            opacity: 1;
+          animation: popIn 0.6s ease forwards;
         }
 
         @keyframes popIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.2);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+          0% {
+            opacity: 0;
+            transform: scale(0.5);
+          }
 
-.feedback.show {
-    animation: popIn 0.6s ease forwards;
-}
+          50% {
+            opacity: 1;
+            transform: scale(1.2);
+          }
 
-        /* Shake animation for wrong guess and reject */
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        /* Shake animation */
         @keyframes shake {
-            0% {
-                transform: translateX(0px);
-            }
-            25% {
-                transform: translateX(-8px);
-            }
-            50% {
-                transform: translateX(8px);
-            }
-            75% {
-                transform: translateX(-8px);
-            }
-            100% {
-                transform: translateX(0px);
-            }
+          0% {
+            transform: translateX(0px);
+          }
+
+          25% {
+            transform: translateX(-8px);
+          }
+
+          50% {
+            transform: translateX(8px);
+          }
+
+          75% {
+            transform: translateX(-8px);
+          }
+
+          100% {
+            transform: translateX(0px);
+          }
         }
 
         .shake {
-            animation: shake 0.5s;
+          animation: shake 0.5s;
         }
 
-        /* Fade animations */
         .fade-out {
-            opacity: 0;
-            transition: opacity 0.5s ease;
+          opacity: 0;
+          transition: opacity 0.5s ease;
         }
 
         .fade-in {
-            opacity: 1;
-            transition: opacity 0.5s ease;
+          opacity: 1;
+          transition: opacity 0.5s ease;
         }
 
-        /* Mobile responsiveness */
+        /* Mobile responsive */
         @media (max-width: 480px) {
-            .game-container {
-                padding: 14px 12px;
-                max-width: 360px;
-                min-height: 550px;
-            }
+          .game-container {
+            padding: 14px 12px;
+            max-width: 360px;
+            min-height: 550px;
+          }
 
-            .answer-box {
-                width: 32px;
-                height: 32px;
-                font-size: 1.2rem;
-            }
+          .answer-box {
+            width: 32px;
+            height: 32px;
+            font-size: 1.2rem;
+          }
 
-            .letter-tile {
-                flex: 0 0 13%;
-                min-width: 40px;
-                height: 40px;
-                font-size: 1.1rem;
-            }
+          .letter-tile {
+            flex: 0 0 13%;
+            min-width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+          }
 
-            .control-btn {
-                min-width: 60px;
-                padding: 8px 0;
-                font-size: 0.9rem;
-            }
+          .control-btn {
+            min-width: 60px;
+            padding: 8px 0;
+            font-size: 0.9rem;
+          }
         }
 
-        /* Ending flow styles */
+        /* Ending flow */
         #endingFlow {
-            display:none;
-            position:fixed;
-            inset:0;
-            background:#ffe6f7;
-            z-index:9999;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            user-select:none;
-            padding:20px;
-            overflow: visible; /* allow reject button to move outside */
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: #ffe6f7;
+          z-index: 9999;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          user-select: none;
+          padding: 20px;
+          overflow: visible;
         }
+
         #gifScreen {
-            opacity:0;
-            transition:opacity 0.8s ease;
-            text-align:center;
-            max-width:400px;
-            position:relative;
+          opacity: 0;
+          transition: opacity 0.8s ease;
+          text-align: center;
+          max-width: 400px;
+          position: relative;
         }
+
         #gifScreen img {
-            max-width:100%;
-            border-radius:20px;
-            box-shadow: 0 0 15px #ff92bc;
-            user-select:none;
-            pointer-events:none;
+          max-width: 100%;
+          border-radius: 20px;
+          box-shadow: 0 0 15px #ff92bc;
+          user-select: none;
+          pointer-events: none;
         }
+
         #gifScreen div {
-            margin-top: 15px;
-            font-size: 1.5rem;
-            color: #b33463;
-            font-weight:700;
-            user-select:none;
+          margin-top: 15px;
+          font-size: 1.5rem;
+          color: #b33463;
+          font-weight: 700;
+          user-select: none;
         }
+
         #gifButtons {
-            margin-top: 20px;
-            opacity:0;
-            transition: opacity 0.5s ease;
-            display:flex;
-            justify-content:center;
-            gap:20px;
-            pointer-events:none;
-            position: relative;
-            height: 50px;
-            user-select:none;
+          margin-top: 20px;
+          opacity: 0;
+          transition: opacity 0.5s ease;
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          pointer-events: none;
+          position: relative;
+          height: 50px;
+          user-select: none;
         }
+
         #gifButtons button {
-            position: relative;
-            background: linear-gradient(to bottom, #ff92bc, #e55597);
-            border:none;
-            border-radius:15px;
-            padding:12px 30px;
-            font-size:1.2rem;
-            font-weight:700;
-            color:#fff;
-            box-shadow: 0 5px 15px rgba(229,85,151,0.7), inset 0 1px 0 rgba(255 255 255 / 0.4);
-            cursor:pointer;
-            transition: background 0.3s ease, transform 0.1s ease;
-            user-select:none;
-            touch-action: manipulation;
-            user-select:none;
-            -webkit-user-select:none;
-            -moz-user-select:none;
-            -ms-user-select:none;
+          position: relative;
+          background: linear-gradient(to bottom, #ff92bc, #e55597);
+          border: none;
+          border-radius: 15px;
+          padding: 12px 30px;
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: #fff;
+          box-shadow: 0 5px 15px rgba(229, 85, 151, 0.7), inset 0 1px 0 rgba(255 255 255 / 0.4);
+          cursor: pointer;
+          transition: background 0.3s ease, transform 0.1s ease;
+          user-select: none;
+          touch-action: manipulation;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          min-width: 120px;
+          box-sizing: border-box;
         }
+
         #gifButtons button#rejectBtn {
-            background: linear-gradient(to bottom, #ffa5c0, #cc3a73);
-            position: fixed; /* Position fixed so can move anywhere on screen */
-            left: 60%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10000;
+          background: linear-gradient(to bottom, #ffa5c0, #cc3a73);
         }
-        #gifButtons button#acceptBtn {
-            position: relative; /* normal flow */
-            z-index: 5000;
+
+        #gifButtons button:hover,
+        #gifButtons button:focus {
+          background: linear-gradient(to bottom, #ffafcd, #f05479);
+          transform: scale(1.1);
+          outline: none;
         }
-        #gifButtons button:hover, #gifButtons button:focus {
-            background: linear-gradient(to bottom, #ffafcd, #f05479);
-            transform: scale(1.1);
-            outline: none;
-        }
+
         #gifButtons button#rejectBtn:hover,
         #gifButtons button#rejectBtn:focus {
-            background: linear-gradient(to bottom, #e582a2, #a63756);
+          background: linear-gradient(to bottom, #e582a2, #a63756);
         }
+
         #gifButtons button:disabled {
-            opacity: 0.5;
-            cursor: default;
-            transform: none !important;
+          opacity: 0.5;
+          cursor: default;
+          transform: none !important;
         }
 
-        #envelopeScreen {
-            opacity: 0;
-            transition:opacity 0.8s ease;
-            display:flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 350px;
-            user-select:none;
-            margin-top: 30px;
-            pointer-events:none;
-        }
-        #envelopeScreen.visible {
-            pointer-events:auto;
-        }
-        #letter {
-            width: 320px;
-            background: white;
-            border-radius: 15px;
-            padding: 25px 30px;
-            box-shadow: 0 5px 15px rgba(203,67,121,0.5);
-            font-family: 'Georgia', serif;
-            font-size: 1rem;
-            color: #b33463;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1s ease, transform 1s ease;
-            user-select: text;
-            max-height: 280px;
-            overflow-y: auto;
-            user-select: text;
-        }
-        #letter.visible {
-            opacity: 1;
-            transform: translateY(0);
+        #letterScreen {
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          max-width: 360px;
+          width: 90vw;
+          background: white;
+          border-radius: 15px;
+          padding: 25px 30px;
+          box-shadow: 0 5px 20px rgba(203, 67, 121, 0.6);
+          font-family: 'Georgia', serif;
+          font-size: 1rem;
+          color: #b33463;
+          overflow-y: auto;
+          max-height: 80vh;
+          user-select: text;
+          z-index: 100000;
+          opacity: 0;
+          transition: opacity 1s ease;
         }
 
+        #letterScreen.visible {
+          opacity: 1;
+        }
     </style>
 </head>
+
 <body>
 <div class="game-container" id="gameContainer" role="main" aria-label="4 Pics 1 Word Valentine Edition game">
     <div class="round-indicator" id="roundIndicator" aria-live="polite">Round 1 / 4</div>
     <div class="image-grid" id="imageGrid" aria-label="Puzzle images">
-        <div class="image-frame"><img src="beautiful2.JPG" alt="Round 1 image 1"/></div>
-        <div class="image-frame"><img src="beautiful3.JPG" alt="Round 1 image 2"/></div>
-        <div class="image-frame"><img src="beautiful4.jpg" alt="Round 1 image 3"/></div>
-        <div class="image-frame"><img src="beautiful1.JPG" alt="Round 1 image 4"/></div>
+        <div class="image-frame"><img src="beautiful2.JPG" alt="Round 1 image 1" /></div>
+        <div class="image-frame"><img src="beautiful3.JPG" alt="Round 1 image 2" /></div>
+        <div class="image-frame"><img src="beautiful4.jpg" alt="Round 1 image 3" /></div>
+        <div class="image-frame"><img src="beautiful1.JPG" alt="Round 1 image 4" /></div>
     </div>
     <div class="answer-boxes" id="answerBoxes" aria-label="Answer boxes" role="list"></div>
     <div class="letter-grid" id="letterGrid" aria-label="Letter selection keyboard"></div>
@@ -427,122 +415,45 @@
     <div class="feedback" id="feedback" aria-live="assertive" role="alert"></div>
 </div>
 
-<!-- ENDING FLOW -->
-<div id="endingFlow" style="display:none; flex-direction:column; justify-content:center; align-items:center; user-select:none; padding:20px; overflow: visible;">
+<!-- ENDING FLOW container -->
+<div id="endingFlow" style="display:none; flex-direction: column; justify-content: center; align-items: center; user-select: none; padding: 20px; overflow: visible;">
     <!-- GIF Screen -->
-    <div id="gifScreen" style="opacity:0; transition:opacity 0.8s ease; text-align:center; max-width:400px; position:relative;">
-        <img src="https://media.tenor.com/kkxWF2DrTRIAAAAi/cat-meme-elgatitolover.gif" alt="Ending GIF" style="max-width:100%; border-radius:20px; box-shadow: 0 0 15px #ff92bc; user-select:none; pointer-events:none;" />
-        <div style="margin-top: 15px; font-size: 1.5rem; color: #b33463; font-weight:700; user-select:none;">
-            Flowers for you, my baby 💐
-        </div>
-        <div id="gifButtons" style="margin-top: 20px; opacity:0; transition: opacity 0.5s ease; display:flex; justify-content:center; gap:5px; pointer-events:none; position: relative; height: 50px; user-select:none;">
-            <button id="acceptBtn" style="
-                background: linear-gradient(to bottom, #ff92bc, #e55597);
-                border:none;
-                border-radius:15px;
-                padding:12px 30px;
-                font-size:1.2rem;
-                font-weight:700;
-                color:#fff;
-                box-shadow: 0 5px 15px rgba(229,85,151,0.7), inset 0 1px 0 rgba(255 255 255 / 0.4);
-                cursor:pointer;
-                transition: background 0.3s ease, transform 0.1s ease;
-                user-select:none;
-                ">✅ Accept</button>
-            <button id="rejectBtn" style="
-                background: linear-gradient(to bottom, #ffa5c0, #cc3a73);
-                border:none;
-                border-radius:15px;
-                padding:12px 30px;
-                font-size:1.2rem;
-                font-weight:700;
-                color:#fff;
-                box-shadow: 0 5px 15px rgba(204, 58, 115, 0.7), inset 0 1px 0 rgba(255 255 255 / 0.4);
-                cursor:pointer;
-                transition: background 0.3s ease, transform 0.1s ease;
-                user-select:none;
-                position: relative;
-                ">❌ Reject</button>
+    <div id="gifScreen" style="opacity: 0; transition: opacity 0.8s ease; text-align: center; max-width: 400px; position: relative;">
+        <img src="https://media.tenor.com/kkxWF2DrTRIAAAAi/cat-meme-elgatitolover.gif" alt="Ending GIF" style="max-width: 100%; border-radius: 20px; box-shadow: 0 0 15px #ff92bc; user-select: none; pointer-events: none;" />
+        <div style="margin-top: 15px; font-size: 1.5rem; color: #b33463; font-weight: 700; user-select: none;">Flowers for you, my baby 💐</div>
+        <div id="gifButtons" style="margin-top: 20px; opacity: 0; transition: opacity 0.5s ease; display: flex; justify-content: center; gap: 10px; pointer-events: none; position: relative; height: 50px; user-select: none;">
+            <button id="acceptBtn" style="background: linear-gradient(to bottom, #ff92bc, #e55597); border: none; border-radius: 15px; padding: 12px 30px; font-size: 1.2rem; font-weight: 700; color: #fff; box-shadow: 0 5px 15px rgba(229, 85, 151, 0.7), inset 0 1px 0 rgba(255 255 255 / 0.4); cursor: pointer; transition: background 0.3s ease, transform 0.1s ease; user-select: none; min-width: 120px; box-sizing: border-box;">✅ Accept</button>
+            <button id="rejectBtn" style="background: linear-gradient(to bottom, #ffa5c0, #cc3a73); border: none; border-radius: 15px; padding: 12px 30px; font-size: 1.2rem; font-weight: 700; color: #fff; box-shadow: 0 5px 15px rgba(204, 58, 115, 0.7), inset 0 1px 0 rgba(255 255 255 / 0.4); cursor: pointer; transition: background 0.3s ease, transform 0.1s ease; user-select: none; position: relative; min-width: 120px; box-sizing: border-box;">❌ Reject</button>
         </div>
     </div>
+
     <!-- Letter Screen -->
-    <div id="envelopeScreen" style="opacity:0; transition:opacity 0.8s ease; display:flex; flex-direction: column; align-items: center; max-width: 350px; user-select:none; margin-top: 30px; pointer-events:none;">
-        <div id="letter" style="
-            width: 320px;
-            background: white;
-            border-radius: 15px;
-            padding: 25px 30px;
-            box-shadow: 0 5px 15px rgba(203,67,121,0.5);
-            font-family: 'Georgia', serif;
-            font-size: 1rem;
-            color: #b33463;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1s ease, transform 1s ease;
-            user-select: text;
-            max-height: 280px;
-            overflow-y: auto;
-            user-select: text;
-            ">
-            <!-- Sample letter content editable -->
-            <p><strong>Hi baby,</strong></p>
-            <p>Thank you for accepting to be my Valentines,mahal.<br/>
-                Wala ka din naman choice, ikaw naman valentine ko buong buhay.</p>
-            <p>I wish I could take you out on a date kaso malayo pa ako eh.</p>
-            <p>I'll bawi nalang sa April baby.<br/>Let me spoil you pag uwi ko ha?</p>
-            <p>Thank you for always loving me and being understanding sa relationship natin.</p>
-            <p>I love you always mahal ko. I'll hug you na soon. I'll kiss you ng madami. </p>
-            <p><em>Yours only,<br/>Neil ❤️</em></p>
-        </div>
+    <div id="letterScreen" tabindex="0">
+        <p><strong>Hi baby,</strong></p>
+        <p>Thank you for accepting to be my Valentines, mahal.<br />Wala ka din naman choice, ikaw naman valentine ko buong buhay.</p>
+        <p>I wish I could take you out on a date kaso malayo pa ako eh.</p>
+        <p>I'll bawi nalang sa April baby.<br />Let me spoil you pag uwi ko ha?</p>
+        <p>Thank you for always loving me and being understanding sa relationship natin.</p>
+        <p>I love you always mahal ko. I'll hug you na soon. I'll kiss you ng madami.</p>
+        <p><em>Yours only,<br />Neil ❤️</em></p>
     </div>
 </div>
 
 <script>
-    // Round data - edit images & answers here
     const rounds = [
-        {
-            answer: "BEAUTIFUL",
-            images: [
-                "beautiful2.JPG",
-                "beautiful3.JPG",
-                "beautiful4.jpg",
-                "beautiful1.JPG",
-            ],
-        },
-        {
-            answer: "CUTE",
-            images: [
-                "cute1.JPG",
-                "cute2.JPG",
-                "cute3.JPG",
-                "cute4.JPG",
-            ],
-        },
-        {
-            answer: "LOVE",
-            images: [
-                "love1.JPG",
-                "love2.JPG",
-                "love3.JPG",
-                "love4.JPG",
-            ],
-        },
-        {
-            answer: "VALENTINE",
-            images: [
-                "valentine1.JPG",
-                "valentine2.JPG",
-                "valentine3.JPG",
-                "valentine4.JPG",
-            ],
-        },
+      { answer: "BEAUTIFUL", images: ["beautiful2.JPG", "beautiful3.JPG", "beautiful4.jpg", "beautiful1.JPG"] },
+      { answer: "CUTE", images: ["cute1.JPG", "cute2.JPG", "cute3.JPG", "cute4.JPG"] },
+      { answer: "LOVE", images: ["love1.JPG", "love2.JPG", "love3.JPG", "love4.JPG"] },
+      { answer: "VALENTINE", images: ["valentine1.JPG", "valentine2.JPG", "valentine3.JPG", "valentine4.JPG"] }
     ];
 
-    let currentRound = 0;
-    let currentGuess = [];
-    let availableLetters = [];
+    const correctFeedbacks = [
+      "Sobrang ganda mo love ❤️",
+      "My cute baabyyy mwahh",
+      "I love you sooo muuch. Ang cute natin hehe.",
+      "Will you be my valentine, mahal?"
+    ];
 
-    // DOM Elements
     const gameContainer = document.getElementById("gameContainer");
     const roundIndicator = document.getElementById("roundIndicator");
     const imageGrid = document.getElementById("imageGrid");
@@ -552,313 +463,293 @@
     const clearBtn = document.getElementById("clearBtn");
     const feedback = document.getElementById("feedback");
 
-    // Ending flow elements
-    const endingFlow = document.getElementById('endingFlow');
-    const gifScreen = document.getElementById('gifScreen');
-    const gifButtons = document.getElementById('gifButtons');
-    const acceptBtn = document.getElementById('acceptBtn');
-    const rejectBtn = document.getElementById('rejectBtn');
-    const envelopeScreen = document.getElementById('envelopeScreen');
-    const letter = document.getElementById('letter');
+    const endingFlow = document.getElementById("endingFlow");
+    const gifScreen = document.getElementById("gifScreen");
+    const gifButtons = document.getElementById("gifButtons");
+    const acceptBtn = document.getElementById("acceptBtn");
+    const rejectBtn = document.getElementById("rejectBtn");
+    const letterScreen = document.getElementById("letterScreen");
+
+    let currentRound = 0;
+    let currentGuess = [];
+    let availableLetters = [];
 
     function generateExtraLetters(answer, totalTiles = 16) {
-        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const answerLetters = answer.split("");
-        const extras = [];
-        while (answerLetters.length + extras.length < totalTiles) {
-            const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-            if (!answerLetters.includes(randomLetter) && !extras.includes(randomLetter)) {
-                extras.push(randomLetter);
-            }
-        }
-        const combined = answerLetters.concat(extras);
-        return shuffle(combined);
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const answerLetters = answer.split("");
+      const extras = [];
+      while (answerLetters.length + extras.length < totalTiles) {
+        const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+        if (!answerLetters.includes(randomLetter) && !extras.includes(randomLetter)) { extras.push(randomLetter);}
+      }
+      return shuffle(answerLetters.concat(extras));
     }
 
     function shuffle(array) {
-        for (let i=array.length-1; i>0; i--) {
-            const j = Math.floor(Math.random() * (i+1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
 
-    function fadeIn(el) {
-        el.style.display = 'flex';
-        el.style.opacity = '0';
-        setTimeout(() => el.style.opacity = '1', 20);
-    }
     function fadeOut(el) {
-        return new Promise((res) => {
-            el.style.opacity = '0';
-            setTimeout(() => {
-                el.style.display = 'none';
-                res();
-            }, 500);
-        });
+      return new Promise(res => {
+        el.style.opacity = '0';
+        setTimeout(() => {
+          el.style.display = 'none';
+          res();
+        }, 500);
+      });
     }
-
-    function shakeElement(el) {
-        el.classList.add('shake');
-        setTimeout(() => el.classList.remove('shake'), 600);
-    }
-
-    // Feedback messages for each round on correct answer
-const correctFeedbacks = [
-    "Sobrang ganda mo love ❤️",
-    "My cute baabyyy mwahh",
-    "I love you sooo muuch. Ang cute natin hehe.",
-    "Will you be my valentine, mahal?"
-];
 
     function loadRound(roundIndex) {
-        const round = rounds[roundIndex];
-        currentRound = roundIndex;
-        currentGuess = [];
-        roundIndicator.textContent = `Round ${roundIndex + 1} / ${rounds.length}`;
+      const round = rounds[roundIndex];
+      currentRound = roundIndex;
+      currentGuess = [];
+      roundIndicator.textContent = `Round ${roundIndex + 1} / ${rounds.length}`;
 
-        gameContainer.style.display = "block";
-        endingFlow.style.display = "none";
-        envelopeScreen.style.opacity = 0;
-        envelopeScreen.style.pointerEvents = "none";
-        letter.classList.remove('visible');
-        letter.style.opacity = 0;
-        letter.style.transform = "translateY(40px)";
+      gameContainer.style.display = "block";
+      endingFlow.style.display = "none";
+      letterScreen.style.display = "none";
+      letterScreen.classList.remove("visible");
 
-        const imgs = imageGrid.querySelectorAll(".image-frame img");
-        round.images.forEach((src,i) => {
-            imgs[i].src = src;
-            imgs[i].alt = `Round ${roundIndex+1} image ${i+1}`;
-        });
+      const imgs = imageGrid.querySelectorAll(".image-frame img");
+      round.images.forEach((src, i) => {
+        imgs[i].src = src;
+        imgs[i].alt = `Round ${roundIndex + 1} image ${i + 1}`;
+      });
 
-        answerBoxes.innerHTML = "";
-        for(let i = 0; i < round.answer.length; i++){
-            const box = document.createElement("div");
-            box.className = "answer-box";
-            box.setAttribute("role","listitem");
-            answerBoxes.appendChild(box);
-        }
+      answerBoxes.innerHTML = "";
+      for (let i = 0; i < round.answer.length; i++) {
+        const box = document.createElement("div");
+        box.className = "answer-box";
+        box.setAttribute("role", "listitem");
+        answerBoxes.appendChild(box);
+      }
 
-        availableLetters = generateExtraLetters(round.answer);
-        renderLetterTiles();
+      availableLetters = generateExtraLetters(round.answer);
+      renderLetterTiles();
 
-        feedback.classList.remove('show');
-        feedback.textContent = "";
-        enableAllTiles();
-
-        gameContainer.classList.remove('fade-in', 'fade-out');
+      feedback.classList.remove("show");
+      feedback.textContent = "";
+      enableAllTiles();
     }
 
-    function renderLetterTiles(){
-        letterGrid.innerHTML = "";
-        availableLetters.forEach(letter => {
-            const btn = document.createElement("button");
-            btn.className = "letter-tile";
-            btn.textContent = letter;
-            btn.type = "button";
-            btn.setAttribute("aria-label", "Letter " + letter);
-            btn.addEventListener("click", ()=>selectLetter(letter, btn));
-            letterGrid.appendChild(btn);
-        });
+    function renderLetterTiles() {
+      letterGrid.innerHTML = "";
+      availableLetters.forEach(letter => {
+        const btn = document.createElement("button");
+        btn.className = "letter-tile";
+        btn.textContent = letter;
+        btn.type = "button";
+        btn.setAttribute("aria-label", "Letter " + letter);
+        btn.addEventListener("click", () => selectLetter(letter, btn));
+        letterGrid.appendChild(btn);
+      });
     }
 
-    function selectLetter(letter,tileBtn){
-        const boxes = Array.from(answerBoxes.children);
-        const emptyBox = boxes.find(box => box.textContent === "");
-        if(!emptyBox) return;
-        emptyBox.textContent = letter;
-        currentGuess.push(letter);
-        tileBtn.disabled = true;
-        tileBtn.classList.add("disabled");
-        checkGuessIfFull();
+    function selectLetter(letter, tileBtn) {
+      const boxes = Array.from(answerBoxes.children);
+      const emptyBox = boxes.find(box => box.textContent === "");
+      if (!emptyBox) return;
+      emptyBox.textContent = letter;
+      currentGuess.push(letter);
+      tileBtn.disabled = true;
+      tileBtn.classList.add("disabled");
+      checkGuessIfFull();
     }
 
-    function enableAllTiles(){
-        const tiles = letterGrid.querySelectorAll(".letter-tile");
-        tiles.forEach(tile => {
-            tile.disabled = false;
-            tile.classList.remove("disabled");
-        });
+    function enableAllTiles() {
+      const tiles = letterGrid.querySelectorAll(".letter-tile");
+      tiles.forEach(tile => {
+        tile.disabled = false;
+        tile.classList.remove("disabled");
+      });
     }
 
-    function checkGuessIfFull(){
-    const round = rounds[currentRound];
-    if(currentGuess.length === round.answer.length){
+    function checkGuessIfFull() {
+      const round = rounds[currentRound];
+      if (currentGuess.length === round.answer.length) {
         const guessWord = currentGuess.join("");
-        if(guessWord === round.answer){
-            showFeedback(correctFeedbacks[currentRound]);  // <-- changed here
-            setTimeout(() => {
-                if(currentRound < rounds.length-1){
-                    fadeTransition(() => loadRound(currentRound+1));
-                } else {
-                    transitionToEnding();
-                }
-            }, 2500);
+        if (guessWord === round.answer) {
+          showFeedback(correctFeedbacks[currentRound]);
+          setTimeout(() => {
+            if (currentRound < rounds.length - 1) {
+              fadeTransition(() => loadRound(currentRound + 1));
+            } else {
+              transitionToEnding();
+            }
+          }, 2500);
         } else {
-            showFeedback("Wrong! Try again.");
-            answerBoxes.classList.add("shake");
-            setTimeout(() => {
-                answerBoxes.classList.remove("shake");
-                feedback.classList.remove("show");
-            }, 800);
+          showFeedback("Wrong! Try again.");
+          answerBoxes.classList.add("shake");
+          setTimeout(() => {
+            answerBoxes.classList.remove("shake");
+            feedback.classList.remove("show");
+          }, 800);
         }
-    } else {
+      } else {
         feedback.classList.remove("show");
         feedback.textContent = "";
+      }
     }
-}
 
-    function showFeedback(text){
-        feedback.textContent = text;
-        feedback.classList.add("show");
+    function showFeedback(text) {
+      feedback.textContent = text;
+      feedback.classList.add("show");
     }
 
     backspaceBtn.addEventListener("click", () => {
-        if(currentGuess.length === 0) return;
-        const lastLetter = currentGuess.pop();
-        const boxes = Array.from(answerBoxes.children);
-        boxes[currentGuess.length].textContent = "";
-        const tiles = letterGrid.querySelectorAll(".letter-tile");
-        for(const tile of tiles){
-            if(tile.textContent === lastLetter && tile.disabled){
-                tile.disabled = false;
-                tile.classList.remove("disabled");
-                break;
-            }
+      if (currentGuess.length === 0) return;
+      const lastLetter = currentGuess.pop();
+      const boxes = Array.from(answerBoxes.children);
+      boxes[currentGuess.length].textContent = "";
+      const tiles = letterGrid.querySelectorAll(".letter-tile");
+      for (const tile of tiles) {
+        if (tile.textContent === lastLetter && tile.disabled) {
+          tile.disabled = false;
+          tile.classList.remove("disabled");
+          break;
         }
-        feedback.classList.remove("show");
+      }
+      feedback.classList.remove("show");
     });
 
     clearBtn.addEventListener("click", () => {
-        currentGuess = [];
-        const boxes = Array.from(answerBoxes.children);
-        boxes.forEach(box => box.textContent = "");
-        enableAllTiles();
-        feedback.classList.remove("show");
+      currentGuess = [];
+      const boxes = Array.from(answerBoxes.children);
+      boxes.forEach(box => (box.textContent = ""));
+      enableAllTiles();
+      feedback.classList.remove("show");
     });
 
-    function fadeTransition(callback){
-        gameContainer.classList.add("fade-out");
+    function fadeTransition(callback) {
+      gameContainer.classList.add("fade-out");
+      setTimeout(() => {
+        callback();
+        gameContainer.classList.remove("fade-out");
+        gameContainer.classList.add("fade-in");
         setTimeout(() => {
-            callback();
-            gameContainer.classList.remove("fade-out");
-            gameContainer.classList.add("fade-in");
-            setTimeout(() => {
-                gameContainer.classList.remove("fade-in");
-            }, 600);
-        }, 500);
+          gameContainer.classList.remove("fade-in");
+        }, 600);
+      }, 500);
     }
 
-    // === ENDING FLOW IMPLEMENTATION ===
+    // Ending flow
 
-    function transitionToEnding(){
-        fadeOut(gameContainer).then(() => {
-            endingFlow.style.display = "flex";
-            gifButtons.style.opacity = "0";
-            gifButtons.style.pointerEvents = "none";
-            gifScreen.style.opacity = "0";
-            envelopeScreen.style.opacity = "0";
-            envelopeScreen.style.pointerEvents = "none";
-            letter.classList.remove("visible");
-            letter.style.opacity = 0;
-            letter.style.transform = "translateY(40px)";
-            // Reset reject button position & style for new game (if replayed)
-            rejectBtn.style.left = "60%";
-            rejectBtn.style.top = "50%";
-            rejectBtn.style.display = "inline-block";
-            rejectBtn.style.opacity = "1";
-            rejectBtn.style.pointerEvents = "auto";
+    function transitionToEnding() {
+      fadeOut(gameContainer).then(() => {
+        endingFlow.style.display = "flex";
+        gifButtons.style.opacity = "0";
+        gifButtons.style.pointerEvents = "none";
+        gifScreen.style.opacity = "0";
 
-            // Fade in gif and text
-            setTimeout(() => gifScreen.style.opacity = "1", 50);
-            // After 1s show buttons
-            setTimeout(() => {
-                gifButtons.style.opacity = "1";
-                gifButtons.style.pointerEvents = "auto";
-            }, 1050);
-        });
+        // Reset reject button style to relative for proper initial alignment
+        rejectBtn.style.position = "relative";
+        rejectBtn.style.left = "auto";
+        rejectBtn.style.top = "auto";
+        rejectBtn.style.transform = "none";
+
+        setTimeout(() => (gifScreen.style.opacity = "1"), 50);
+        setTimeout(() => {
+          gifButtons.style.opacity = "1";
+          gifButtons.style.pointerEvents = "auto";
+        }, 1050);
+      });
     }
 
     acceptBtn.addEventListener("click", async () => {
-        acceptBtn.disabled = true;
-        rejectBtn.disabled = true;
-        // Fade out gifScreen + buttons
-        gifScreen.style.opacity = "0";
-        gifButtons.style.opacity = "0";
-        gifButtons.style.pointerEvents = "none";
-        await new Promise(r => setTimeout(r, 500));
-        // Show letter directly, no envelope animation
-        envelopeScreen.style.opacity = "0";
-        envelopeScreen.style.display = "flex";
-        envelopeScreen.style.pointerEvents = "auto";
-        setTimeout(() => {
-            envelopeScreen.style.opacity = "1";
-            letter.classList.add("visible");
-            letter.style.opacity = "1";
-            letter.style.transform = "translateY(0)";
-        }, 20);
+      acceptBtn.disabled = true;
+      rejectBtn.disabled = true;
+
+      // Fade out gif and buttons
+      gifScreen.style.opacity = "0";
+      gifButtons.style.opacity = "0";
+      gifButtons.style.pointerEvents = "none";
+
+      await new Promise(r => setTimeout(r, 500));
+
+      gifScreen.style.display = "none";
+      gifButtons.style.display = "none";
+
+      // Show letter screen centered and scrollable
+      letterScreen.style.display = "block";
+      setTimeout(() => {
+        letterScreen.style.opacity = "1";
+        letterScreen.classList.add("visible");
+      }, 20);
     });
 
     rejectBtn.addEventListener("click", () => {
-        // Move reject button randomly anywhere inside visible viewport, avoiding accept button area
+      const button = rejectBtn;
+      const acceptButton = acceptBtn;
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const btnWidth = button.offsetWidth;
+      const btnHeight = button.offsetHeight;
+      const acceptRect = acceptButton.getBoundingClientRect();
+      const margin = 50;
 
-        const button = rejectBtn;
-        const acceptButton = acceptBtn;
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+      function isOverlap(x1, y1, w1, h1, x2, y2, w2, h2) {
+        return !(
+          x1 + w1 < x2 ||
+          x1 > x2 + w2 ||
+          y1 + h1 < y2 ||
+          y1 > y2 + h2
+        );
+      }
 
-        const btnWidth = button.offsetWidth;
-        const btnHeight = button.offsetHeight;
+      let randomX, randomY, tries = 0;
+      do {
+        randomX = Math.random() * (viewportWidth - btnWidth);
+        randomY = Math.random() * (viewportHeight - btnHeight);
+        tries++;
+        if (tries > 100) break;
+      } while (
+        isOverlap(
+          randomX,
+          randomY,
+          btnWidth,
+          btnHeight,
+          acceptRect.left - margin,
+          acceptRect.top - margin,
+          acceptRect.width + 2 * margin,
+          acceptRect.height + 2 * margin
+        )
+      );
 
-        const acceptRect = acceptButton.getBoundingClientRect();
-
-        // We'll avoid an area around acceptBtn: acceptRect plus a margin
-        const margin = 50;
-
-        // Function to check if two rectangles overlap
-        function isOverlap(x1, y1, w1, h1, x2, y2, w2, h2) {
-            return !(x1 + w1 < x2 || x1 > x2 + w2 || y1 + h1 < y2 || y1 > y2 + h2);
-        }
-
-        let randomX, randomY, tries = 0;
-        do {
-            randomX = Math.random() * (viewportWidth - btnWidth);
-            randomY = Math.random() * (viewportHeight - btnHeight);
-            tries++;
-            if(tries > 100) break; // safety break to avoid infinite loop
-        } while (isOverlap(randomX, randomY, btnWidth, btnHeight, acceptRect.left - margin, acceptRect.top - margin, acceptRect.width + 2*margin, acceptRect.height + 2*margin));
-
-        // Apply fixed positioning of reject button with transform to center button over the position
-        button.style.position = "fixed";
-        // Use top/left as coordinates for upper-left corner
-        // To center the button exactly at randomX, randomY, we offset by half width/height
-        button.style.left = (randomX + btnWidth/2) + "px";
-        button.style.top = (randomY + btnHeight/2) + "px";
-        button.style.transform = "translate(-50%, -50%)";
-        button.style.transition = "left 0.3s ease, top 0.3s ease";
+      button.style.position = "fixed";
+      button.style.left = randomX + btnWidth / 2 + "px";
+      button.style.top = randomY + btnHeight / 2 + "px";
+      button.style.transform = "translate(-50%, -50%)";
+      button.style.transition = "left 0.3s ease, top 0.3s ease";
     });
 
-    // Keyboard support for laptop/desktop
     window.addEventListener("keydown", (e) => {
-        if(gameContainer.style.display === "none") return;
-        const key = e.key.toUpperCase();
-        const tileButtons = Array.from(letterGrid.querySelectorAll(".letter-tile"));
-        if(/^[A-Z]$/.test(key)){
-            const tile = tileButtons.find(t => t.textContent === key && !t.disabled);
-            if(tile){
-                tile.click();
-            }
-            e.preventDefault();
-        } else if(e.key === "Backspace"){
-            backspaceBtn.click();
-            e.preventDefault();
-        } else if(e.key === "Escape"){
-            clearBtn.click();
-            e.preventDefault();
+      if (gameContainer.style.display === "none") return;
+      const key = e.key.toUpperCase();
+      const tileButtons = Array.from(
+        letterGrid.querySelectorAll(".letter-tile")
+      );
+      if (/^[A-Z]$/.test(key)) {
+        const tile = tileButtons.find(
+          (t) => t.textContent === key && !t.disabled
+        );
+        if (tile) {
+          tile.click();
         }
+        e.preventDefault();
+      } else if (e.key === "Backspace") {
+        backspaceBtn.click();
+        e.preventDefault();
+      } else if (e.key === "Escape") {
+        clearBtn.click();
+        e.preventDefault();
+      }
     });
 
-    // Load first round on init
+    // Start first round on page load
     loadRound(0);
 </script>
 </body>
